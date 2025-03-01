@@ -5,11 +5,13 @@ namespace DbChatBot.Infrastructure.Contracts;
 public interface IBotService
 {
     Task<IChatClient?> CreateChatClient(
-        string openAiEndpoint,
-        string openAiKey,
-        string model);
+        string endpoint,
+        string model,
+        string serviceName,
+        string? aiKey = null);
 
     Task<List<ChatMessage>?> GetChatHistory(
+        string serviceName,
         string[]? schemaColumns,
         string? databaseType,
         string? prompt);

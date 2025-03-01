@@ -5,8 +5,8 @@ using MediatR;
 namespace DbChatBot.Application.Bot.Queries.GetStatement;
 
 public sealed record GetStatementQuery(
-    string? OpenAiEndpoint,
-    string? OpenAiKey,
+    string? Endpoint,
+    string? AiKey,
     string? ModelName,
     string? ServiceName,
     string? Prompt,

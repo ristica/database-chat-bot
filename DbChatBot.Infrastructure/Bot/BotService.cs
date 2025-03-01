@@ -1,6 +1,7 @@
 ﻿using System.ClientModel;
 using System.Text;
 using Azure.AI.OpenAI;
+using DbChatBot.Constants;
 using DbChatBot.Infrastructure.Contracts;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
@@ -10,18 +11,29 @@ namespace DbChatBot.Infrastructure.Bot;
 public class BotService(IConfiguration config) : IBotService
 {
     public async Task<IChatClient?> CreateChatClient(
-        string openAiEndpoint,
-        string openAiKey,
-        string model)
+        string endpoint,
+        string model,
+        string serviceName,
+        string? aiKey = null)
     {
-        return await Task.FromResult(
-            new AzureOpenAIClient(
-                    new Uri(openAiEndpoint),
-                    new ApiKeyCredential(openAiKey))
-                .AsChatClient(model));
+        return serviceName switch
+        {
+            AiProvider.AzureOpenAi => 
+                await Task.FromResult(
+                    new AzureOpenAIClient(
+                        new Uri(endpoint), 
+                        new ApiKeyCredential(aiKey!))
+                        .AsChatClient(model)),
+            AiProvider.Ollama => 
+                await Task.FromResult(
+                    new OllamaChatClient(
+                        new Uri(endpoint))),
+            _ => null
+        };
     }
 
     public async Task<List<ChatMessage>?> GetChatHistory(
+        string serviceName,
         string[]? schemaColumns,
         string? databaseType,
         string? prompt)
@@ -49,7 +61,10 @@ public class BotService(IConfiguration config) : IBotService
         builder.AppendLine($"Always limit the SQL query to {maxRows} rows.");
         builder.AppendLine("Always include all of the table columns and details.");
 
-        chatHistory.Add(new ChatMessage(ChatRole.System, builder.ToString()));
+        chatHistory.Add(serviceName.EndsWith(AiProvider.Ollama)
+            ? new ChatMessage(ChatRole.System, builder.ToString())
+            : new ChatMessage(ChatRole.User, builder.ToString()));
+
         chatHistory.Add(new ChatMessage(ChatRole.User, prompt));
 
         return await Task.FromResult(chatHistory);

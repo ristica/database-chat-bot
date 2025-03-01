@@ -6,14 +6,14 @@ public class GetStatementValidator : AbstractValidator<GetStatementQuery>
 {
     public GetStatementValidator()
     {
-        RuleFor(x => x.OpenAiEndpoint)
+        RuleFor(x => x.Endpoint)
             .NotEmpty()
             .NotNull()
             .WithMessage("AI endpoint is required");
-        RuleFor(x => x.OpenAiKey)
+        RuleFor(x => x.ServiceName)
             .NotEmpty()
             .NotNull()
-            .WithMessage("AI key is required");
+            .WithMessage("AI provider is required");
         RuleFor(x => x.ModelName)
             .NotEmpty()
             .NotNull()

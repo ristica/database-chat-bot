@@ -21,9 +21,10 @@ public class GetStatementHandler(
     {
         var chatClient =
             await botService.CreateChatClient(
-                request.OpenAiEndpoint!,
-                request.OpenAiKey!,
-                request.ModelName!);
+                request.Endpoint!,
+                request.ModelName!,
+                request.ServiceName!,
+                request.AiKey);
 
         if (chatClient == null)
             return Error.Failure(
@@ -31,6 +32,7 @@ public class GetStatementHandler(
 
         var chatHistory =
             await botService.GetChatHistory(
+                request.ServiceName!,
                 request.Schema,
                 request.DatabaseType,
                 request.Prompt);

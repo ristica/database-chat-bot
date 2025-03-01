@@ -20,8 +20,8 @@ public class AiController(
         StatementRequestDto dto)
     {
         var query = new GetStatementQuery(
-            dto.OpenAiEndpoint,
-            dto.OpenAiKey,
+            dto.Endpoint,
+            dto.AiKey,
             dto.ModelName,
             dto.ServiceName,
             dto.Prompt,

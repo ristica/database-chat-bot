@@ -1,0 +1,36 @@
+
+name: Build & Publish
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  merge-job:
+    name: All-In-One
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup the .NET environment
+        uses: actions/setup-dotnet@v4
+
+      - name: Install dependencies
+        run: dotnet restore '${{ github.workspace }}/DbChatBot/DbChatBot.csproj' 
+
+      - name: Build
+        run: dotnet build '${{ github.workspace }}/DbChatBot/DbChatBot.csproj' --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish '${{ github.workspace }}/DbChatBot/DbChatBot.csproj' -c Release -o publish
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: publish/**
+          if-no-files-found: error
+          retention-days: 90

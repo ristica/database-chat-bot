@@ -33,13 +33,11 @@ public static class Bootstrapper
         services.AddKeyedTransient<ISchemaService, MsSqlSchemaService>(DatabaseProvider.MsSql);
         services.AddKeyedTransient<ISchemaService, MySqlSchemaService>(DatabaseProvider.MySql);
         services.AddKeyedTransient<ISchemaService, PostgreSqlSchemaService>(DatabaseProvider.PostgresSql);
-        services.AddKeyedTransient<ISchemaService, OracleSchemaService>(DatabaseProvider.Oracle);
 
         services.AddTransient(typeof(IGenericDatabaseService), typeof(GenericDatabaseService));
         services.AddKeyedTransient<IDatabaseService, MsSqlDatabaseService>(DatabaseProvider.MsSql);
         services.AddKeyedTransient<IDatabaseService, MySqlDatabaseService>(DatabaseProvider.MySql);
         services.AddKeyedTransient<IDatabaseService, PostgresSqlDatabaseService>(DatabaseProvider.PostgresSql);
-        services.AddKeyedTransient<IDatabaseService, OracleDatabaseService>(DatabaseProvider.Oracle);
 
         return services;
     }

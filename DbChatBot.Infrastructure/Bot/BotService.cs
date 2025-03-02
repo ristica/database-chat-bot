@@ -27,7 +27,8 @@ public class BotService(IConfiguration config) : IBotService
             AiProvider.Ollama => 
                 await Task.FromResult(
                     new OllamaChatClient(
-                        new Uri(endpoint))),
+                        new Uri(endpoint), 
+                        model)),
             _ => null
         };
     }

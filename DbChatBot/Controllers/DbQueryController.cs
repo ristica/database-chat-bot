@@ -1,4 +1,5 @@
 ﻿using DbChatBot.Application.Bot.Queries.GetStatement;
+using DbChatBot.Application.Table.Queries.GetData;
 using DbChatBot.Contracts.Dtos;
 using DbChatBot.Controllers.Base;
 using MediatR;
@@ -8,9 +9,9 @@ namespace DbChatBot.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AiController(
+public class DbQueryController(
     ISender sender,
-    ILogger<AiController> logger)
+    ILogger<DbQueryController> logger)
     : ApiController
 {
     // StatementResponseDto
@@ -27,6 +28,24 @@ public class AiController(
             dto.Prompt,
             dto.Schema,
             dto.DatabaseType);
+
+        var result = await sender.Send(query);
+
+        return result.Match(
+            Ok,
+            Problem);
+    }
+
+    // QueryResponseDto
+    [HttpPost]
+    [Route("ExecuteQuery")]
+    public async Task<IActionResult> ExecuteQuery(
+        QueryRequestDto dto)
+    {
+        var query = new GetDataQuery(
+            dto.ConnectionString,
+            dto.DatabaseType,
+            dto.SqlQuery);
 
         var result = await sender.Send(query);
 

@@ -1,5 +1,4 @@
 ﻿using DbChatBot.Application.Schema.Queries.GenerateSchema;
-using DbChatBot.Application.Table.Queries.GetData;
 using DbChatBot.Contracts.Dtos;
 using DbChatBot.Controllers.Base;
 using MediatR;
@@ -9,9 +8,9 @@ namespace DbChatBot.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DbController(
+public class DbSchemaController(
     ISender sender,
-    ILogger<DbController> logger)
+    ILogger<DbSchemaController> logger)
     : ApiController
 {
     // DatabaseSchemaResponseDto
@@ -27,21 +26,5 @@ public class DbController(
             Problem);
     }
 
-    // QueryResponseDto
-    [HttpPost]
-    [Route("ExecuteQuery")]
-    public async Task<IActionResult> ExecuteQuery(
-        QueryRequestDto dto)
-    {
-        var query = new GetDataQuery(
-            dto.ConnectionString,
-            dto.DatabaseType,
-            dto.SqlQuery);
-
-        var result = await sender.Send(query);
-
-        return result.Match(
-            Ok,
-            Problem);
-    }
+    
 }

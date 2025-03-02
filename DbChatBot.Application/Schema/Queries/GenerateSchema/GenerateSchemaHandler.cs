@@ -8,10 +8,10 @@ using Microsoft.Extensions.Logging;
 
 namespace DbChatBot.Application.Schema.Queries.GenerateSchema;
 
-public class SchemaHandler(
+public class GenerateSchemaHandler(
     IGenericSchemaService genericSchemaService,
     IMapper mapper,
-    ILogger<SchemaHandler> logger)
+    ILogger<GenerateSchemaHandler> logger)
     : IRequestHandler<GenerateSchemaQuery, ErrorOr<DatabaseSchemaResponseDto>>
 {
     public async Task<ErrorOr<DatabaseSchemaResponseDto>> Handle(

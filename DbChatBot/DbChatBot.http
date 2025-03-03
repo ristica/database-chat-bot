@@ -1,0 +1,11 @@
+﻿@DbChatBot_HostAddress = http://localhost:5041
+
+POST {{DbChatBot_HostAddress}}/api/dbschema
+Content-Type: application/json
+
+{
+  "connectionString": "Data Source=127.0.0.1,1433;Database=sakila;User Id=sakila;Password=p_ssW0rd;TrustServerCertificate=true;",
+  "databaseType": "MSSQL"
+}
+
+###
